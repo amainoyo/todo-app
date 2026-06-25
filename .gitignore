@@ -1,0 +1,38 @@
+# 编辑器 / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件 / OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件 / Temp files
+*.tmp
+*.bak
+*.swp
+*~
+
+# 调试文件 / Debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 本地配置 / Local config
+.env
+.env.local
+*.local
+
+# 敏感信息 / Sensitive data
+# 不要提交 Personal Access Token！
+# NEVER commit Personal Access Tokens!
+# 如已泄露，请立即到 https://github.com/settings/tokens 撤销
+# If leaked, revoke immediately at https://github.com/settings/tokens
+
+# 用户本地存储的数据
+# User local data
+*.local.json
