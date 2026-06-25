@@ -80,17 +80,39 @@ todo-app/
 
 ## ⚙️ GitHub 同步配置 / GitHub Sync Configuration
 
-1. 创建 Personal Access Token：https://github.com/settings/tokens
-   Create a PAT at: https://github.com/settings/tokens
-2. 必须勾选 `repo` 权限
-   Must select `repo` scope
-3. 在应用的 ⚙️ 设置中填写：
-   Fill in the app's ⚙️ settings:
-   - GitHub 用户名 / Username
-   - 仓库名 / Repository name
-   - 分支名 / Branch name（默认 main）
-   - 文件路径 / File path（默认 `data/tasks.json`）
-   - Personal Access Token
+### 步骤 / Steps
+
+1. **创建 Personal Access Token**：https://github.com/settings/tokens
+   **Create a PAT** at https://github.com/settings/tokens
+   - 勾选 `repo` 权限 / Select `repo` scope
+   - 建议设置 90 天过期 / Set 90-day expiration
+
+2. **在应用 ⚙️ 中配置** / **Configure in the app ⚙️**：
+   - 填写 GitHub 用户名 / Username
+   - 填写**数据仓库名**（如 `todo-data`，用于存储任务）
+     Enter **data repository name** (e.g., `todo-data`)
+   - 填写 Personal Access Token
+   - 点击 **+ 创建** 按钮自动创建私有仓库
+     Click **+ Create** to auto-create the private repository
+   - 勾选"启用 GitHub 同步" / Enable GitHub sync
+
+### 🔒 隐私架构 / Privacy Architecture
+
+应用代码（公开）+ 任务数据（私有）分离：
+
+App code (public) + Task data (private) are separated:
+
+```
+your-username/todo-app (public)        ← 应用代码 / App code
+└── index.html
+
+your-username/todo-data (private)     ← 任务数据 / Task data  
+└── data/tasks.json
+```
+
+这样其他用户可以访问站点，但**看不到你的任务**。
+
+Other users can visit the site but **cannot see your tasks**.
 
 ## 🔒 安全提示 / Security Notice
 
@@ -100,6 +122,8 @@ todo-app/
   Anyone with access to your computer + this site can read the data
 - 建议定期轮换 Token
   Recommend rotating Token regularly
+- 强烈建议使用**专用 Token**（仅本应用，限定 90 天）
+  Strongly recommend using a **dedicated Token** (only for this app, 90-day limit)
 
 ## 📜 License
 

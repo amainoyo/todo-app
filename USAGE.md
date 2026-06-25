@@ -78,30 +78,58 @@ Click the 🌓 button in the top-right to toggle dark/light theme. The setting i
 2. Click **Generate new token** → **Generate new token (classic)**
 3. Fill in Note (e.g., `todo-app`)
 4. **Check the `repo` scope**
-5. Click **Generate token**
-6. **Copy and save** the token (you won't see it again)
+5. **Expiration**: Choose 90 days (rotate regularly)
+6. Click **Generate token**
+7. **Copy and save** the token (you won't see it again)
 
 ### ⚙️ Configure Sync
 
 1. Click **⚙️** in the top-right corner of the app
 2. Fill in:
-   - **GitHub Username**: Your GitHub username
-   - **Repository**: e.g., `todo-app`
+   - **GitHub Username**: Your GitHub username (e.g., `amainoyo`)
+   - **📦 Data Repository** (recommended private): e.g., `todo-data`
    - **Branch**: Default `main`
    - **File Path**: Default `data/tasks.json`
    - **Personal Access Token**: The token you just created
-3. **Check** "Enable GitHub sync"
-4. Click **Save**
+3. Click **+ Create** button → auto-creates a private repository via GitHub API
+4. **Check** "Enable GitHub sync"
+5. Click **Save**
+
+### 🏗️ Recommended Architecture (Data Separation)
+
+```
+your-username/todo-app (public repo)        ← App code
+├── index.html
+└── ...
+
+your-username/todo-data (private repo)      ← Your task data
+└── data/
+    └── tasks.json
+```
+
+**Benefits**:
+- ✅ App code is public (GitHub Pages works)
+- ✅ Task data is private (only you can access)
+- ✅ One-click private repository creation
 
 ### 📡 Sync Mechanism
 
 - **First load**: Pulls saved tasks from GitHub
 - **On every change**: Auto-pushes to GitHub after 1.5 seconds
 - **Fallback**: Local storage is preserved if GitHub fails
+- **Conflict resolution**: Last write wins (suitable for single-user, multi-device)
 
 ### 🔄 Multi-device Usage
 
 Configure with the same token on different devices to automatically sync all tasks.
+
+### 👥 Multi-user Independent Usage
+
+The site is public. Anyone can:
+1. Visit https://amainoyo.github.io/todo-app/
+2. Configure with their own GitHub account
+3. Store data in **their own private repository**
+4. No interference with other users
 
 ---
 
@@ -149,6 +177,22 @@ Configure with the same token on different devices to automatically sync all tas
 
 ### Q: Will data conflict between devices?
 **A**: Simple "last write wins" model. For collaborative editing, use a more specialized tool.
+
+### Q: Can others see my tasks when synced to GitHub?
+**A**: Depends on repository visibility:
+- **Public repo**: Anyone can view raw JSON at `https://github.com/username/repo/blob/main/data/tasks.json`
+- **Private repo**: Only you can access
+
+**Strongly recommended**: Use the in-app **+ Create** button to auto-create a private data repository (e.g., `todo-data`), separate from the public app repository (`todo-app`).
+
+### Q: The site is public, can others use it too?
+**A**: Yes! Anyone can:
+1. Visit https://amainoyo.github.io/todo-app/
+2. Configure with their own GitHub account + Token
+3. Store data in **their own private repository**
+4. No interference with other users
+
+This is the core advantage of this app — **deploy once, everyone can use it, each user keeps their data private**.
 
 ---
 
