@@ -363,13 +363,20 @@
         <button class="modal-close" data-action="closeSettings">×</button>
       </div>
       <div class="modal-body">
+        <div style="background:rgba(245,158,11,0.1);border-left:3px solid var(--warning);padding:12px;border-radius:6px;margin-bottom:15px;font-size:13px;color:var(--text)">
+          ⚠️ <strong>隐私提示</strong>：任务数据将存储到 GitHub 仓库。<br>
+          建议创建<strong>私有仓库</strong>专门存放任务，避免暴露在公开仓库。
+        </div>
         <p style="color:var(--text-secondary);font-size:13px;margin-bottom:15px">
-          填写 GitHub 信息以启用云端同步。需要 Personal Access Token（<a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary)">点击创建</a>，需勾选 <code>repo</code> 权限）。
+          需要 Personal Access Token（<a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary)">点击创建</a>，需勾选 <code>repo</code> 权限）。
         </p>
         <label style="font-size:13px;color:var(--text-secondary)">GitHub 用户名</label>
         <input type="text" id="ghOwner" placeholder="例如：zhangsan">
-        <label style="font-size:13px;color:var(--text-secondary)">仓库名</label>
-        <input type="text" id="ghRepo" placeholder="例如：todo-app">
+        <label style="font-size:13px;color:var(--text-secondary)">📦 数据仓库名（建议私有）</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="ghRepo" placeholder="例如：todo-data" style="flex:1">
+          <button class="btn btn-secondary" data-action="createPrivateRepo" style="white-space:nowrap;font-size:12px">+ 创建</button>
+        </div>
         <label style="font-size:13px;color:var(--text-secondary)">分支名</label>
         <input type="text" id="ghBranch" placeholder="main" value="main">
         <label style="font-size:13px;color:var(--text-secondary)">文件路径</label>
@@ -512,6 +519,48 @@
       closeSettings();
       showSyncStatus('设置已保存，正在刷新...', 'info');
       setTimeout(() => location.reload(), 800);
+    }
+
+    // 一键创建私有数据仓库
+    async function createPrivateRepo() {
+      const owner = document.getElementById('ghOwner').value.trim();
+      const repoName = document.getElementById('ghRepo').value.trim() || 'todo-data';
+      const token = document.getElementById('ghToken').value.trim();
+
+      if (!owner) return alert('请先填写 GitHub 用户名');
+      if (!token) return alert('请先填写 Personal Access Token');
+
+      if (!confirm(`将创建私有仓库：${owner}/${repoName}\n（GitHub 限制同名仓库只能存在一个）`)) return;
+
+      try {
+        showSyncStatus('正在创建仓库...', 'info');
+        const res = await fetch('https://api.github.com/user/repos', {
+          method: 'POST',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: repoName,
+            description: 'Private storage for todo app data',
+            private: true,
+            auto_init: true
+          })
+        });
+
+        if (res.status === 422) {
+          alert('仓库已存在，可直接使用');
+          return;
+        }
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || `HTTP ${res.status}`);
+        }
+        alert(`✅ 私有仓库创建成功：${owner}/${repoName}\n请勾选"启用 GitHub 同步"并保存`);
+      } catch (err) {
+        alert('创建失败：' + err.message);
+      }
     }
 
     // ============= Data & App =============
@@ -1025,6 +1074,7 @@
         else if (action === 'closeSettings') closeSettings();
         else if (action === 'saveTask') saveTask();
         else if (action === 'saveSettings') saveSettings();
+        else if (action === 'createPrivateRepo') createPrivateRepo();
         else if (action === 'selectColor') selectColor(target);
         else if (action === 'selectEditColor') selectEditColor(target);
         else if (action === 'toggleSubtask') {
