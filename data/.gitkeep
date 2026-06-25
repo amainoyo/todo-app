@@ -1,0 +1,23 @@
+# 数据目录 / Data Directory
+
+本目录用于存储 GitHub 同步的任务数据。
+
+This directory stores task data synchronized with GitHub.
+
+**默认文件** / **Default file**: `tasks.json`
+
+**启用同步后** / **After enabling sync**:
+- 首次保存时，app 会自动创建 `tasks.json`
+- The app auto-creates `tasks.json` on first save
+- 每次修改后 1.5 秒自动推送到此文件
+- Auto-pushes to this file 1.5s after every change
+
+**首次同步前** / **Before first sync**:
+- 此目录为空（除 .gitkeep 外）
+- This directory is empty (except for .gitkeep)
+- 数据存储在浏览器 LocalStorage 中
+- Data is stored in browser LocalStorage
+
+**修改文件路径** / **To change file path**:
+- 在应用 ⚙️ 设置中修改 "文件路径"
+- Modify "File path" in the app's ⚙️ settings
